@@ -12,17 +12,19 @@ def create_app(config_name="Config"):
     app = Flask(__name__)
     app.config.from_object(f"config.{config_name}")
 
+    # init extensions
     db.init_app(app)
     ma.init_app(app)
     limiter.init_app(app)
     cache.init_app(app)
 
+    # register blueprints
     app.register_blueprint(customers_bp, url_prefix="/customers")
     app.register_blueprint(mechanics_bp, url_prefix="/mechanics")
     app.register_blueprint(service_tickets_bp, url_prefix="/service-tickets")
     app.register_blueprint(inventory_bp, url_prefix="/inventory")
 
-    # ✅ CREATE TABLES ON STARTUP (THIS FIXES RENDER)
+    # ✅ CREATE TABLES IN PRODUCTION
     with app.app_context():
         db.create_all()
 
