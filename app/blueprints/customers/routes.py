@@ -97,3 +97,10 @@ def delete_customer(customer_id):
     db.session.delete(customer)
     db.session.commit()
     return "", 204
+
+
+
+@customers_bp.route("/<int:customer_id>", methods=["GET"])
+def get_customer(customer_id):
+    customer = Customer.query.get_or_404(customer_id)
+    return customer_schema.jsonify(customer), 200
